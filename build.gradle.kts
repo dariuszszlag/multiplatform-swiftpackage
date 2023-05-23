@@ -22,7 +22,6 @@ plugins {
     `kotlin-dsl`
     `java-gradle-plugin`
     `maven-publish`
-    signing
 }
 
 repositories {
@@ -99,15 +98,5 @@ publishing {
                 password = GIT_TOKEN
             }
         }
-    }
-}
-
-signing {
-    sign(publishing.publications["multiplatformSwiftPackagePlugin"])
-}
-
-tasks.javadoc {
-    if (JavaVersion.current().isJava9Compatible) {
-        (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
     }
 }
