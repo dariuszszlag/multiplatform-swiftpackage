@@ -1,0 +1,30 @@
+name: Create Multiplatform Swift Package Plugin Release
+
+on:
+  push:
+    tags:
+      - "*.*.*"
+
+  workflow_dispatch:
+
+jobs:
+  publish:
+    name: Release multiplatform-swiftpackage
+    runs-on: ubuntu-latest
+    steps:
+    
+    - name: Checkout the repo
+      uses: actions/checkout@v3
+
+    - name: Set Up JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: 11
+        distribution: temurin
+
+    - name: Change wrapper permissions
+      run: chmod +x ./gradlew
+
+    - name: Publish to GitHub Package Registry 🚀
+      run: ./gradlew publishMultiplatformSwiftPackagePluginPublicationToGitHubPackagesRepository -PGIT_USER=${{ github.actor }} -PGIT_TOKEN=${{ secrets.SECRET_GITHUB_CODE }} -PVERSION_NAME=${{ github.ref_name }}
+
