@@ -1,12 +1,16 @@
 package com.chromaticnoise.multiplatformswiftpackage
 
 import com.chromaticnoise.multiplatformswiftpackage.domain.AppleTarget
+import com.chromaticnoise.multiplatformswiftpackage.domain.DistributionMode
 import com.chromaticnoise.multiplatformswiftpackage.domain.platforms
-import com.chromaticnoise.multiplatformswiftpackage.task.*
 import com.chromaticnoise.multiplatformswiftpackage.task.registerCreateSwiftPackageTask
 import com.chromaticnoise.multiplatformswiftpackage.task.registerCreateUniversalIosSimulatorFrameworkTask
+import com.chromaticnoise.multiplatformswiftpackage.task.registerCreateUniversalMacosFrameworkTask
+import com.chromaticnoise.multiplatformswiftpackage.task.registerCreateUniversalTvosSimulatorFrameworkTask
+import com.chromaticnoise.multiplatformswiftpackage.task.registerCreateUniversalWatchosSimulatorFrameworkTask
 import com.chromaticnoise.multiplatformswiftpackage.task.registerCreateXCFrameworkTask
 import com.chromaticnoise.multiplatformswiftpackage.task.registerCreateZipFileTask
+import com.chromaticnoise.multiplatformswiftpackage.task.registerPublishMultiplatformTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.create
@@ -16,7 +20,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 /**
  * Plugin to generate XCFramework and Package.swift file for Apple platform targets.
  */
-public class MultiplatformSwiftPackagePlugin : Plugin<Project> {
+class MultiplatformSwiftPackagePlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         val extension = project.extensions.create<SwiftPackageExtension>(EXTENSION_NAME, project)
@@ -34,6 +38,7 @@ public class MultiplatformSwiftPackagePlugin : Plugin<Project> {
                 project.registerCreateXCFrameworkTask()
                 project.registerCreateZipFileTask()
                 project.registerCreateSwiftPackageTask()
+                if (extension.distributionMode is DistributionMode.Maven) project.registerPublishMultiplatformTask()
             }
         }
     }

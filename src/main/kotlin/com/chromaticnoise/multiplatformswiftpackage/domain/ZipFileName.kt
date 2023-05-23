@@ -4,7 +4,9 @@ import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.P
 
 internal class ZipFileName private constructor(private val value: String) {
 
-    internal val nameWithExtension: String get() = "$value.zip"
+    private val nameWithExtension: String get() = "$value.zip"
+
+    fun getName(buildOnMaven: Boolean = false) = if (buildOnMaven) value else nameWithExtension
 
     internal companion object {
         fun of(name: String?): Either<PluginConfigurationError, ZipFileName> =

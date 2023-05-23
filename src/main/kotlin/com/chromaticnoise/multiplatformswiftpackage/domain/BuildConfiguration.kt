@@ -7,9 +7,10 @@ internal sealed class BuildConfiguration {
     internal object Debug : BuildConfiguration()
     internal data class Custom(val configurationName: String) : BuildConfiguration()
 
-    val name get() = when(this) {
-        Release -> NativeBuildType.RELEASE.getName()
-        Debug -> NativeBuildType.DEBUG.getName()
-        is Custom -> configurationName
-    }
+    val name
+        get() = when (this) {
+            Release -> NativeBuildType.RELEASE.getName()
+            Debug -> NativeBuildType.DEBUG.getName()
+            is Custom -> configurationName
+        }
 }

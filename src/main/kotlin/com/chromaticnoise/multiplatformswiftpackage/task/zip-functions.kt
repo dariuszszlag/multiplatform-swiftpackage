@@ -1,14 +1,20 @@
 package com.chromaticnoise.multiplatformswiftpackage.task
 
+import com.chromaticnoise.multiplatformswiftpackage.domain.DistributionMode
 import com.chromaticnoise.multiplatformswiftpackage.domain.OutputDirectory
 import com.chromaticnoise.multiplatformswiftpackage.domain.ZipFileName
 import org.gradle.api.Project
 import java.io.ByteArrayOutputStream
 import java.io.File
 
-internal fun zipFileChecksum(project: Project, outputDirectory: OutputDirectory, zipFileName: ZipFileName): String {
+internal fun zipFileChecksum(
+    project: Project,
+    distributionMode: DistributionMode,
+    outputDirectory: OutputDirectory,
+    zipFileName: ZipFileName
+): String {
     val outputPath = outputDirectory.value
-    return File(outputPath, zipFileName.nameWithExtension)
+    return File(outputPath, zipFileName.getName(distributionMode is DistributionMode.Maven))
         .takeIf { it.exists() }
         ?.let { zipFile ->
             ByteArrayOutputStream().use { os ->

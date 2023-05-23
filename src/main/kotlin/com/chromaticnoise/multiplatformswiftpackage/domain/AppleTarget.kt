@@ -9,11 +9,12 @@ internal class AppleTarget private constructor(val nativeTarget: KotlinNativeTar
     internal fun getFramework(buildConfiguration: BuildConfiguration): AppleFramework? =
         try {
             val nativeBinary = nativeTarget.binaries.find { binary ->
-                binary.buildType.getName().equals(buildConfiguration.name, ignoreCase = true) &&
-                    binary.outputKind == NativeOutputKind.FRAMEWORK
+                binary.buildType.getName().equals(buildConfiguration.name, ignoreCase = true) && binary.outputKind == NativeOutputKind.FRAMEWORK
             }
             AppleFramework.of(nativeBinary)
-        } catch (_: Exception) { null }
+        } catch (_: Exception) {
+            null
+        }
 
     internal companion object {
         fun allOf(

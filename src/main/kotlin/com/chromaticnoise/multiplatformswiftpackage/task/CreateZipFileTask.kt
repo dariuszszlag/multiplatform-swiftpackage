@@ -1,5 +1,6 @@
 package com.chromaticnoise.multiplatformswiftpackage.task
 
+import com.chromaticnoise.multiplatformswiftpackage.domain.DistributionMode
 import com.chromaticnoise.multiplatformswiftpackage.domain.getConfigurationOrThrow
 import org.gradle.api.Project
 import org.gradle.api.tasks.bundling.Zip
@@ -13,7 +14,7 @@ internal fun Project.registerCreateZipFileTask() {
 
         val configuration = getConfigurationOrThrow()
         val outputDirectory = configuration.outputDirectory.value
-        archiveFileName.set(configuration.zipFileName.nameWithExtension)
+        archiveFileName.set(configuration.zipFileName.getName(configuration.distributionMode is DistributionMode.Maven))
         destinationDirectory.set(outputDirectory)
         from(outputDirectory) {
             include("**/*.xcframework/")

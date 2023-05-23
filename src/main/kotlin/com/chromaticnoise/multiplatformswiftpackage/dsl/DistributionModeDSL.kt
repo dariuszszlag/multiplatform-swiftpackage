@@ -1,19 +1,26 @@
 package com.chromaticnoise.multiplatformswiftpackage.dsl
 
 import com.chromaticnoise.multiplatformswiftpackage.domain.DistributionMode
-import com.chromaticnoise.multiplatformswiftpackage.domain.DistributionURL
+import com.chromaticnoise.multiplatformswiftpackage.domain.RemoteDistribution
 
 /**
  * DSL to create instance of a [DistributionModeDSL].
  */
-public class DistributionModeDSL {
+class DistributionModeDSL {
     internal var distributionMode: DistributionMode = DistributionMode.Local
 
     /**
      * The XCFramework will be distributed via the local file system.
      */
-    public fun local() {
+    fun local() {
         distributionMode = DistributionMode.Local
+    }
+
+    /**
+     * The XCFramework will be distributed via a Maven Repository (such as Github Packages).
+     */
+    fun maven() {
+        distributionMode = DistributionMode.Maven
     }
 
     /**
@@ -21,7 +28,7 @@ public class DistributionModeDSL {
      *
      * @param url where the ZIP file can be downloaded from. E.g. https://example.com/packages/
      */
-    public fun remote(url: String) {
-        distributionMode = DistributionMode.Remote(DistributionURL(url))
+    fun remote(url: String) {
+        distributionMode = DistributionMode.Remote(RemoteDistribution(url))
     }
 }

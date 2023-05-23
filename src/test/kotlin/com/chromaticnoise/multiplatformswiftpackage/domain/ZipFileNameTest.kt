@@ -34,7 +34,7 @@ class ZipFileNameTest : StringSpec({
 
     "file extension should be .zip" {
         forAll(Arb.string().filter { it.isNotBlank() }) { name ->
-            ZipFileName.of(name).orNull!!.nameWithExtension.endsWith(".zip")
+            ZipFileName.of(name).orNull!!.getName().endsWith(".zip")
         }
     }
 })

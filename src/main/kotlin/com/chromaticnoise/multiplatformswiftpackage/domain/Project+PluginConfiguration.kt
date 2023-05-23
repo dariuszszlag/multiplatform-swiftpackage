@@ -21,24 +21,35 @@ private fun List<PluginConfigurationError>.toErrorMessage() = joinToString("\n\n
         * Swift tools version is missing.
           Declare it by adding your Swift version to the plugin configuration block.
         """.trimIndent()
+
         PluginConfigurationError.MissingTargetPlatforms -> """
         * Target platforms are missing.
           Declare at least one platform by adding it to the plugin configuration block.
         """.trimIndent()
+
         PluginConfigurationError.MissingAppleTargets -> """
         * No Apple targets declared.
           It appears your multiplatform project does not contain any Apple target. 
         """.trimIndent()
+
         is PluginConfigurationError.InvalidTargetName -> """
         * Target name is invalid: ${error.name}
-          Only the following target names are valid: ${TargetName.values().joinToString { it.identifier }}
+          Only the following target names are valid: ${
+            TargetName.values().joinToString { it.identifier }
+        }
         """.trimIndent()
+
         PluginConfigurationError.BlankPackageName -> """
         * Package name must not be blank
           Either declare the base name of your frameworks or use a non-empty package name.
         """.trimIndent()
+
         PluginConfigurationError.BlankZipFileName -> """
         * ZIP file name must not be blank
+        """.trimIndent()
+
+        PluginConfigurationError.BlankVersionName -> """
+        * Version name must not be blank
         """.trimIndent()
     }
 }
