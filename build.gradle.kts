@@ -10,7 +10,7 @@ buildscript {
 
 apply(plugin = "binary-compatibility-validator")
 
-group = "com.darek"
+group = "com.dariusz"
 
 val GIT_USER: String? by project
 val GIT_TOKEN: String? by project
