@@ -72,8 +72,9 @@ publishing {
     publications {
         create<MavenPublication>("multiplatformSwiftPackagePlugin") {
             pom {
-                groupId = "com.dariusz.multiplatform-swiftpackage"
-                artifactId = "com.dariusz.multiplatform-swiftpackage.gradle.plugin"
+                groupId = "com.dariusz"
+                artifactId = "multiplatform-swiftpackage"
+                version = VERSION_NAME ?: "0.1"
 
                 name.set("Multiplatform Swift Package")
                 description.set("Gradle plugin to generate a Swift.package file and XCFramework to distribute a Kotlin Multiplatform iOS library")
