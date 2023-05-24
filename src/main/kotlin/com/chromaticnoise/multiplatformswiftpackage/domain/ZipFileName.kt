@@ -6,7 +6,8 @@ internal class ZipFileName private constructor(private val value: String) {
 
     private val nameWithExtension: String get() = "$value.zip"
 
-    fun getName(buildOnMaven: Boolean = false, newValue: String = "") = if (buildOnMaven) "$newValue.zip" else nameWithExtension
+    fun getName(distributionMode: DistributionMode, newValue: String? = "") =
+        if (distributionMode is DistributionMode.Maven) "$newValue.zip" else nameWithExtension
 
     internal companion object {
         fun of(name: String?): Either<PluginConfigurationError, ZipFileName> =

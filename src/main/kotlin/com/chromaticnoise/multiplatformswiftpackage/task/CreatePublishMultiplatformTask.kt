@@ -10,13 +10,17 @@ import org.gradle.api.tasks.TaskProvider
 import org.gradle.kotlin.dsl.getByType
 
 internal fun Project.registerPublishMultiplatformTask() {
+    val projectGroup = group
     val mavenPublishingExtension = extensions.getByType<PublishingExtension>()
     val projectConfiguration = getConfigurationOrThrow()
+    val distributionMode = projectConfiguration.distributionMode
+    val packageName = projectConfiguration.packageName
+    val versionName = projectConfiguration.versionName
     mavenPublishingExtension.publications.create(projectConfiguration.packageName.value, MavenPublication::class.java) {
         version = projectConfiguration.versionName.value
-        group = this@registerPublishMultiplatformTask.group
-        artifact(getZippedXCFrameworkName())
+        group = projectGroup
         artifactId = projectConfiguration.packageName.nameWithSuffix
+        artifact(projectConfiguration.zipFileName.getName(distributionMode, "${packageName.nameWithSuffix}-${versionName.value}"))
         publishingTasks.forEach {
             tasks.named("createSwiftPackage").configure { dependsOn(it) }
         }
