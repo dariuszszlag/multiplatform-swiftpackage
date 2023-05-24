@@ -36,9 +36,7 @@ internal fun Project.registerCreateSwiftPackageTask() {
                 distributionMode = configuration.distributionMode,
                 zipChecksum = zipFileChecksum(
                     project,
-                    configuration.distributionMode,
-                    configuration.outputDirectory,
-                    configuration.zipFileName
+                    configuration.outputDirectory
                 ),
                 zipFileName = configuration.zipFileName
             )

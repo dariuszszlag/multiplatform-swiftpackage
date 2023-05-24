@@ -5,6 +5,7 @@ import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.P
 import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.PluginConfigurationError.MissingAppleTargets
 import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.PluginConfigurationError.MissingSwiftToolsVersion
 import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.PluginConfigurationError.MissingTargetPlatforms
+import com.chromaticnoise.multiplatformswiftpackage.task.getZippedXCFrameworkName
 import org.gradle.api.Project
 
 internal class PluginConfiguration private constructor(
@@ -62,7 +63,6 @@ internal class PluginConfiguration private constructor(
                         targetPlatforms,
                         extension.appleTargets,
                         extension.zipFileName?.orNull ?: defaultZipFileName(
-                            packageName.orNull!!,
                             extension.project
                         )
                     )
@@ -79,8 +79,8 @@ internal class PluginConfiguration private constructor(
                         PackageName.of(framework.name.value)
                     } ?: Either.Left(BlankPackageName)
 
-        private fun defaultZipFileName(packageName: PackageName, project: Project) =
-            ZipFileName.of("${packageName.nameWithSuffix}-${project.version}").orNull!!
+        private fun defaultZipFileName(project: Project) =
+            ZipFileName.of(project.getZippedXCFrameworkName()).orNull!!
 
         private fun getDestinationProjectVersion(project: Project) = VersionName.of(project.version.toString()).orNull!!
     }

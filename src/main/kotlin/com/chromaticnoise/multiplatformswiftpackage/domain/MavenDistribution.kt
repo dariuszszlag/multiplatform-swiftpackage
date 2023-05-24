@@ -13,7 +13,7 @@ internal object MavenDistribution {
     internal fun createMavenDistributionUrl(project: Project, versionName: VersionName, packageName: PackageName): String {
         val mavenPublishingExtension = project.extensions.getByType<PublishingExtension>()
         val repository = mavenPublishingExtension.repositories.findByName(packageName.value) as MavenArtifactRepository
-        val url = repository.url.toASCIIString()
+        val url = repository.url.toString()
         val version = versionName.value
         val group = project.group.toString()
         val artifactId = packageName.nameWithSuffix
