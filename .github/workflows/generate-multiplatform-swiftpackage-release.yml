@@ -26,4 +26,4 @@ jobs:
       run: chmod +x ./gradlew
 
     - name: Publish to GitHub Package Registry 🚀
-      run: ./gradlew publishAllPublicationsToGitHubPackagesRepository -PGIT_USER=${{ github.actor }} -PGIT_TOKEN=${{ secrets.SECRET_GITHUB_CODE }} -PVERSION_NAME=${{ github.ref_name }}
+      run: ./gradlew publishPluginMavenPublicationToGitHubPackagesRepository -PGIT_USER=${{ github.actor }} -PGIT_TOKEN=${{ secrets.SECRET_GITHUB_CODE }} -PVERSION_NAME=${{ github.ref_name }}
