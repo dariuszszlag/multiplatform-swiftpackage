@@ -21,5 +21,5 @@ internal object MavenDistribution {
     }
 
     private fun artifactPath(url: String, group: String, artifactId: String, version: String) =
-        "$url/$group/$artifactId/$version/$artifactId-$version.zip"
+        "$url/${group.replace(".", "/")}/$artifactId/$version/$artifactId-$version.zip"
 }

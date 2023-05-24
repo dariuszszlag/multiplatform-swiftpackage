@@ -16,7 +16,12 @@ internal fun Project.registerPublishMultiplatformTask() {
     mavenPublishingExtension.publications.create(projectConfiguration.packageName.value, MavenPublication::class.java) {
         version = projectConfiguration.versionName.value
         group = this@registerPublishMultiplatformTask.group
-        artifact(projectConfiguration.zipFileName.getName(projectConfiguration.distributionMode is DistributionMode.Maven)) {
+        artifact(
+            projectConfiguration.zipFileName.getName(
+                projectConfiguration.distributionMode is DistributionMode.Maven,
+                projectConfiguration.let { "${it.packageName.value}-${it.versionName.value}" }
+            )
+        ) {
             extension = "zip"
         }
         artifactId = projectConfiguration.packageName.value

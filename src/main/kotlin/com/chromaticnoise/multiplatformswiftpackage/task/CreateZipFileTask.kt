@@ -14,7 +14,12 @@ internal fun Project.registerCreateZipFileTask() {
 
         val configuration = getConfigurationOrThrow()
         val outputDirectory = configuration.outputDirectory.value
-        archiveFileName.set(configuration.zipFileName.getName(configuration.distributionMode is DistributionMode.Maven))
+        archiveFileName.set(
+            configuration.zipFileName.getName(
+                configuration.distributionMode is DistributionMode.Maven,
+                configuration.let { "${it.packageName.value}-${it.versionName.value}" }
+            )
+        )
         destinationDirectory.set(outputDirectory)
         from(outputDirectory) {
             include("**/*.xcframework/")
