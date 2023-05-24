@@ -105,7 +105,7 @@ class PluginConfigurationTest : BehaviorSpec() {
                 )
 
                 Then("the base name of the first framework should be used") {
-                    PluginConfiguration.of(extension).orNull!!.packageName.value shouldBe expectedName
+                    PluginConfiguration.of(extension).orNull!!.packageName.nameWithSuffix shouldBe expectedName
                 }
             }
 

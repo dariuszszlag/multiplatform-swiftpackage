@@ -20,7 +20,7 @@ internal fun zipFileChecksum(
         zipFileName.getName(
             distributionMode is DistributionMode.Maven,
             project.getConfigurationOrThrow().let {
-                it.let { "${it.packageName.value}-${it.versionName.value}" }
+                it.let { "${it.packageName.nameWithSuffix}-${it.versionName.value}" }
             }
         )
     )

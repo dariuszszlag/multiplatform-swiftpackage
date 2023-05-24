@@ -5,6 +5,10 @@ import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.P
 
 internal class PackageName private constructor(val value: String) {
 
+    private val suffix = "-multi"
+
+    val nameWithSuffix = "$value$suffix"
+
     internal companion object {
         fun of(name: String?): Either<PluginConfigurationError, PackageName> =
             name?.ifNotBlank { Either.Right(PackageName(it)) }

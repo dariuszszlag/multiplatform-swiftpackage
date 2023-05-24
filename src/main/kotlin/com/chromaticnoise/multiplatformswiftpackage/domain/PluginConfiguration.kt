@@ -80,7 +80,7 @@ internal class PluginConfiguration private constructor(
                     } ?: Either.Left(BlankPackageName)
 
         private fun defaultZipFileName(packageName: PackageName, project: Project) =
-            ZipFileName.of("${packageName.value}-${project.version}").orNull!!
+            ZipFileName.of("${packageName.nameWithSuffix}-${project.version}").orNull!!
 
         private fun getDestinationProjectVersion(project: Project) = VersionName.of(project.version.toString()).orNull!!
     }

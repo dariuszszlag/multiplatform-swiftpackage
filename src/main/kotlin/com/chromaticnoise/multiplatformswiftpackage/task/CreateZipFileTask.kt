@@ -17,7 +17,7 @@ internal fun Project.registerCreateZipFileTask() {
         archiveFileName.set(
             configuration.zipFileName.getName(
                 configuration.distributionMode is DistributionMode.Maven,
-                configuration.let { "${it.packageName.value}-${it.versionName.value}" }
+                configuration.let { "${it.packageName.nameWithSuffix}-${it.versionName.value}" }
             )
         )
         destinationDirectory.set(outputDirectory)

@@ -19,12 +19,10 @@ internal fun Project.registerPublishMultiplatformTask() {
         artifact(
             projectConfiguration.zipFileName.getName(
                 projectConfiguration.distributionMode is DistributionMode.Maven,
-                projectConfiguration.let { "${it.packageName.value}-${it.versionName.value}" }
+                projectConfiguration.let { "${it.packageName.nameWithSuffix}-${it.versionName.value}" }
             )
-        ) {
-            extension = "zip"
-        }
-        artifactId = projectConfiguration.packageName.value
+        )
+        artifactId = projectConfiguration.packageName.nameWithSuffix
         publishingTasks.forEach {
             tasks.named("createSwiftPackage").configure { dependsOn(it) }
         }

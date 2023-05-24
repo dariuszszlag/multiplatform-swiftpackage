@@ -16,7 +16,7 @@ internal object MavenDistribution {
         val url = repository.url.toASCIIString()
         val version = versionName.value
         val group = project.group.toString()
-        val artifactId = packageName.value
+        val artifactId = packageName.nameWithSuffix
         return artifactPath(url.slashTerminatedValue, group, artifactId, version)
     }
 

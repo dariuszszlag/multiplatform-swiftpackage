@@ -18,10 +18,7 @@ internal data class SwiftPackageConfiguration(
     private val distributionUrl = when (distributionMode) {
         is DistributionMode.Local -> null
         is DistributionMode.Maven -> createMavenDistributionUrl(project, versionName, packageName)
-        is DistributionMode.Remote -> distributionMode.url.appendPath(zipFileName.getName(
-            distributionMode is DistributionMode.Maven,
-            "${packageName.value}-${versionName.value}"
-        )).value
+        is DistributionMode.Remote -> distributionMode.url.appendPath(zipFileName.getName()).value
     }
 
     internal val templateProperties = mapOf(
