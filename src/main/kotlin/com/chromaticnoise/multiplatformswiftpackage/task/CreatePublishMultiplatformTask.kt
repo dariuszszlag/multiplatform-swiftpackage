@@ -2,11 +2,8 @@ package com.chromaticnoise.multiplatformswiftpackage.task
 
 import com.chromaticnoise.multiplatformswiftpackage.domain.getConfigurationOrThrow
 import org.gradle.api.Project
-import org.gradle.api.Task
-import org.gradle.api.artifacts.repositories.MavenArtifactRepository
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
-import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.bundling.Zip
 import org.gradle.kotlin.dsl.getByType
 
@@ -22,21 +19,13 @@ internal fun Project.registerPublishMultiplatformTask() {
         group = projectGroup
         artifactId = projectConfiguration.packageName.nameWithSuffix
         artifact(zipFileArtifact)
-
-        publishingTasks.forEach {
-            tasks.named("createSwiftPackage").configure { dependsOn(it) }
-        }
-
+        dependCreatingSwiftPackageOnMavenPublishTask()
     }
 }
 
-private val Project.publishingTasks: List<TaskProvider<Task>> get() {
-    val mavenPublishingExtension = extensions.getByType<PublishingExtension>()
+private fun Project.dependCreatingSwiftPackageOnMavenPublishTask() {
     val projectConfiguration = getConfigurationOrThrow()
-    val publicationName = mavenPublishingExtension.publications.getByName(projectConfiguration.packageName.value).name.capitalize()
-    return mavenPublishingExtension.repositories.filterIsInstance<MavenArtifactRepository>().map { repo ->
-        val repositoryName = repo.name.capitalize()
-        val publishTaskName = "publish${publicationName}PublicationTo${repositoryName}Repository"
-        tasks.named(publishTaskName)
-    }
+    val publicationName = projectConfiguration.packageName.value.capitalize()
+    val publishTaskName = "publish${publicationName}PublicationToGitHubPackagesRepository" //temporarily set only GitHubPackages
+    return tasks.named("createSwiftPackage").configure { dependsOn(tasks.named(publishTaskName)) }
 }
