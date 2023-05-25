@@ -2,7 +2,6 @@ package com.chromaticnoise.multiplatformswiftpackage.task
 
 import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration
 import com.chromaticnoise.multiplatformswiftpackage.domain.SwiftPackageConfiguration
-import com.chromaticnoise.multiplatformswiftpackage.domain.ZipFileName
 import com.chromaticnoise.multiplatformswiftpackage.domain.getConfigurationOrThrow
 import com.chromaticnoise.multiplatformswiftpackage.domain.konanTarget
 import com.chromaticnoise.multiplatformswiftpackage.domain.swiftPackagePlatformName
@@ -43,7 +42,7 @@ internal fun Project.registerCreateSwiftPackageTask() {
                     configuration.packageName,
                     configuration.versionName
                 ),
-                zipFileName = ZipFileName.of("${configuration.packageName.nameWithSuffix}-${configuration.versionName.value}").orNull!!
+                zipFileName = configuration.zipFileName
             )
 
             SimpleTemplateEngine()
