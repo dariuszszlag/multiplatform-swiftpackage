@@ -1,6 +1,5 @@
 package com.chromaticnoise.multiplatformswiftpackage.domain
 
-import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.artifacts.repositories.MavenArtifactRepository
 import org.gradle.api.publish.PublishingExtension
@@ -23,8 +22,7 @@ internal object MavenDistribution {
     private fun Project.getMavenArtifactRepository(packageName: PackageName): MavenArtifactRepository {
         val mavenPublishingExtension = extensions.getByType<PublishingExtension>()
         return mavenPublishingExtension.repositories.filterIsInstance<MavenArtifactRepository>().firstOrNull() ?:
-            mavenPublishingExtension.repositories.findByName(packageName.value) as MavenArtifactRepository ?:
-            throw GradleException("Artifact repository not found, please, specify maven repository")
+            mavenPublishingExtension.repositories.findByName(packageName.value) as MavenArtifactRepository
     }
 
     private fun artifactPath(url: String, group: String, artifactId: String, version: String) =

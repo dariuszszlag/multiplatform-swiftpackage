@@ -22,6 +22,8 @@ internal fun Project.registerCreateSwiftPackageTask() {
             val packageSwiftFileName = SwiftPackageConfiguration.FILE_NAME
             val packageFile = file("$outputPath/$packageSwiftFileName")
 
+            val zipFileChecksum = zipFileChecksum(configuration)
+
             val packageConfiguration = SwiftPackageConfiguration(
                 project = project,
                 packageName = configuration.packageName,
@@ -29,11 +31,11 @@ internal fun Project.registerCreateSwiftPackageTask() {
                 toolVersion = configuration.swiftToolsVersion,
                 platforms = platforms(configuration),
                 distributionMode = configuration.distributionMode,
-                zipChecksum = zipFileChecksum(configuration),
+                zipChecksum = zipFileChecksum,
                 zipFileName = configuration.zipFileName
             )
 
-            SimpleTemplateEngine()
+            if (zipFileChecksum != "") SimpleTemplateEngine()
                 .createTemplate(SwiftPackageConfiguration.templateFile)
                 .make(packageConfiguration.templateProperties)
                 .writeTo(packageFile.writer())

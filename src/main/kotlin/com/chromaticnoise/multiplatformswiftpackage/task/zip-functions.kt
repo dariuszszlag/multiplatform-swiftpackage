@@ -4,6 +4,7 @@ import com.chromaticnoise.multiplatformswiftpackage.domain.DistributionMode
 import com.chromaticnoise.multiplatformswiftpackage.domain.OutputDirectory
 import com.chromaticnoise.multiplatformswiftpackage.domain.PackageName
 import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration
+import com.chromaticnoise.multiplatformswiftpackage.domain.SwiftPackageConfiguration
 import com.chromaticnoise.multiplatformswiftpackage.domain.VersionName
 import com.chromaticnoise.multiplatformswiftpackage.domain.ZipFileName
 import org.gradle.api.Project
@@ -17,9 +18,19 @@ internal fun Project.zipFileChecksum(
 ): String {
     val zipFile = getZipFile(pluginConfiguration)
     val os = ByteArrayOutputStream()
+    val outputPath = pluginConfiguration.outputDirectory.value
+    val packageSwiftFileName = SwiftPackageConfiguration.FILE_NAME
+    val packageSwiftFile = file("$outputPath/$packageSwiftFileName")
+    val hadPackageSwift = packageSwiftFile.exists()
+    if (!hadPackageSwift) {
+        packageSwiftFile.writeText("")
+    }
     exec {
         getSha256(zipFile)
         standardOutput = os
+    }
+    if (!hadPackageSwift) {
+        packageSwiftFile.delete()
     }
     return os.toByteArray().toString(Charset.defaultCharset()).trim()
 }
@@ -48,12 +59,9 @@ private fun Project.getZipFileBuilder(
 private fun ExecSpec.getSha256(file: File): ExecSpec? {
     val filePath = file.path
     return commandLine(
-        "shasum",
-        "-a",
-        "256",
-        filePath,
-        "|",
-        "sed",
-        "'s/ .*//'"
+        "swift",
+        "package",
+        "compute-checksum",
+        filePath
     )
 }
