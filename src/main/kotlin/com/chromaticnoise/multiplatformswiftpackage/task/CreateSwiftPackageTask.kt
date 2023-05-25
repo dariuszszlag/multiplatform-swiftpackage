@@ -34,14 +34,7 @@ internal fun Project.registerCreateSwiftPackageTask() {
                 toolVersion = configuration.swiftToolsVersion,
                 platforms = platforms(configuration),
                 distributionMode = configuration.distributionMode,
-                zipChecksum = zipFileChecksum(
-                    project,
-                    configuration.distributionMode,
-                    configuration.outputDirectory,
-                    configuration.zipFileName,
-                    configuration.packageName,
-                    configuration.versionName
-                ),
+                zipChecksum = zipFileChecksum(configuration),
                 zipFileName = configuration.zipFileName
             )
 

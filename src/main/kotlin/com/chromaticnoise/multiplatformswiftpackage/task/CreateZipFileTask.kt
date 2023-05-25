@@ -13,15 +13,11 @@ internal fun Project.registerCreateZipFileTask() {
 
         val projectConfiguration = getConfigurationOrThrow()
         val outputDirectory = projectConfiguration.outputDirectory.value
-        val distributionMode = projectConfiguration.distributionMode
         val packageName = projectConfiguration.packageName
-        val versionName = projectConfiguration.versionName
-        val zipFileName = projectConfiguration.zipFileName.getName(distributionMode, "${packageName.nameWithSuffix}-${versionName.value}")
-        val zipFilePath = file("$outputDirectory/$zipFileName")
         val xcFrameworkPath = file("$outputDirectory/${packageName.value}.xcframework")
 
         from(xcFrameworkPath)
         destinationDirectory.set(outputDirectory)
-        archiveFileName.set(zipFilePath.name)
+        archiveFileName.set(getZipFile(projectConfiguration).name)
     }
 }
