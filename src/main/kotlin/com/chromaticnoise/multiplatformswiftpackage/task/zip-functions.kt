@@ -9,26 +9,28 @@ import com.chromaticnoise.multiplatformswiftpackage.domain.ZipFileName
 import org.gradle.api.Project
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.nio.charset.Charset
 
 internal fun Project.zipFileChecksum(
     pluginConfiguration: PluginConfiguration
-): String = getZipFile(pluginConfiguration)
-        .takeIf { it.exists() }
-        ?.let { zipFile ->
-            ByteArrayOutputStream().use { os ->
-                exec {
-                    workingDir = pluginConfiguration.outputDirectory.value
-                    commandLine(
-                        "swift",
-                        "package",
-                        "compute-checksum",
-                        zipFile.path
-                    )
-                    standardOutput = os
-                }
-                os.toString()
-            }
-        } ?: ""
+): String {
+    val zipFile = getZipFile(pluginConfiguration)
+    val os = ByteArrayOutputStream()
+    return if (zipFile.exists()) {
+        exec {
+            commandLine(
+                "swift",
+                "package",
+                "compute-checksum",
+                zipFile.path
+            )
+            standardOutput = os
+        }
+        os.toByteArray().toString(Charset.defaultCharset()).trim()
+    } else {
+        ""
+    }
+}
 
 internal fun Project.getZipFile(pluginConfiguration: PluginConfiguration) = getZipFileBuilder(
     pluginConfiguration.outputDirectory,
