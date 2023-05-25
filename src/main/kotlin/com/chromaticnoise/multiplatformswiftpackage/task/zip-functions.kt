@@ -18,8 +18,12 @@ internal fun Project.zipFileChecksum(
             ByteArrayOutputStream().use { os ->
                 exec {
                     workingDir = pluginConfiguration.outputDirectory.value
-                    executable = "swift"
-                    args = listOf("package", "compute-checksum", zipFile.name)
+                    commandLine(
+                        "swift",
+                        "package",
+                        "compute-checksum",
+                        zipFile.path
+                    )
                     standardOutput = os
                 }
                 os.toString()
@@ -43,6 +47,6 @@ private fun Project.getZipFileBuilder(
 ): File {
     val outputPath = outputDirectory.value
     val zipFileNamed = zipFileName.getName(distributionMode, "${packageName.nameWithSuffix}-${versionName.value}")
-    val zipFilePath = file("$outputDirectory/$zipFileNamed")
+    val zipFilePath = file("$outputPath/$zipFileNamed")
     return File(outputPath, zipFilePath.name)
 }

@@ -7,7 +7,6 @@ import com.chromaticnoise.multiplatformswiftpackage.domain.konanTarget
 import com.chromaticnoise.multiplatformswiftpackage.domain.swiftPackagePlatformName
 import groovy.text.SimpleTemplateEngine
 import org.gradle.api.Project
-import java.io.File
 
 internal fun Project.registerCreateSwiftPackageTask() {
     tasks.register("createSwiftPackage") {
@@ -19,13 +18,9 @@ internal fun Project.registerCreateSwiftPackageTask() {
 
         doLast {
             val configuration = getConfigurationOrThrow()
-            val packageFile = File(
-                configuration.outputDirectory.value,
-                SwiftPackageConfiguration.FILE_NAME
-            ).apply {
-                parentFile.mkdirs()
-                createNewFile()
-            }
+            val outputPath = configuration.outputDirectory.value
+            val packageSwiftFileName = SwiftPackageConfiguration.FILE_NAME
+            val packageFile = file("$outputPath/$packageSwiftFileName")
 
             val packageConfiguration = SwiftPackageConfiguration(
                 project = project,
