@@ -18,7 +18,7 @@ internal fun Project.registerCreateZipFileTask() {
         val versionName = projectConfiguration.versionName
         val zipFileName = projectConfiguration.zipFileName.getName(distributionMode, "${packageName.nameWithSuffix}-${versionName.value}")
         val zipFilePath = file("$outputDirectory/$zipFileName")
-        val xcFrameworkPath = file("$outputDirectory/$packageName.xcframework")
+        val xcFrameworkPath = file("$outputDirectory/${packageName.value}.xcframework")
 
         from(xcFrameworkPath)
         destinationDirectory.set(outputDirectory)
