@@ -18,10 +18,11 @@ internal fun zipFileChecksum(
     versionName: VersionName
 ): String {
     val outputPath = outputDirectory.value
-    val zipFilePath = zipFileName.getName(distributionMode, "${packageName.nameWithSuffix}-${versionName.value}")
+    val zipFileNamed = zipFileName.getName(distributionMode, "${packageName.nameWithSuffix}-${versionName.value}")
+    val zipFilePath = project.file("$outputDirectory/$zipFileNamed")
     return File(
         outputPath,
-        zipFilePath
+        zipFilePath.name
     )
         .takeIf { it.exists() }
         ?.let { zipFile ->
