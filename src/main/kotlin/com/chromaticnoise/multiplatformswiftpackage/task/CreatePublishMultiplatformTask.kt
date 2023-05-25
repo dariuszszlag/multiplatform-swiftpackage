@@ -7,23 +7,26 @@ import org.gradle.api.artifacts.repositories.MavenArtifactRepository
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.tasks.TaskProvider
+import org.gradle.api.tasks.bundling.Zip
 import org.gradle.kotlin.dsl.getByType
 
 internal fun Project.registerPublishMultiplatformTask() {
     val projectGroup = group
     val mavenPublishingExtension = extensions.getByType<PublishingExtension>()
     val projectConfiguration = getConfigurationOrThrow()
-    val distributionMode = projectConfiguration.distributionMode
-    val packageName = projectConfiguration.packageName
-    val versionName = projectConfiguration.versionName
+    val zipFileArtifact = tasks.named("createZipFile", Zip::class.java).flatMap {
+        it.archiveFile
+    }
     mavenPublishingExtension.publications.create(projectConfiguration.packageName.value, MavenPublication::class.java) {
         version = projectConfiguration.versionName.value
         group = projectGroup
         artifactId = projectConfiguration.packageName.nameWithSuffix
-        artifact(projectConfiguration.zipFileName.getName(distributionMode, "${packageName.nameWithSuffix}-${versionName.value}"))
+        artifact(zipFileArtifact)
+
         publishingTasks.forEach {
             tasks.named("createSwiftPackage").configure { dependsOn(it) }
         }
+
     }
 }
 
