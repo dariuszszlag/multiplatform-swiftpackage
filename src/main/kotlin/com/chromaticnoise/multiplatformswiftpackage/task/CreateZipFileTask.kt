@@ -20,7 +20,7 @@ internal fun Project.registerCreateZipFileTask() {
         val zipFilePath = file("$outputDirectory/$zipFileName")
         val xcFrameworkPath = file("$outputDirectory/$packageName.xcframework")
 
-        from(xcFrameworkPath.name)
+        from(xcFrameworkPath)
         destinationDirectory.set(outputDirectory)
         archiveFileName.set(zipFilePath.name)
     }
