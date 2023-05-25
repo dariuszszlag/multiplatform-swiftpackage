@@ -17,15 +17,11 @@ internal fun Project.zipFileChecksum(
 ): String {
     val zipFile = getZipFile(pluginConfiguration)
     val os = ByteArrayOutputStream()
-    return if (zipFile.exists()) {
-        exec {
-            getSha256(zipFile)
-            standardOutput = os
-        }
-        os.toByteArray().toString(Charset.defaultCharset()).trim()
-    } else {
-        ""
+    exec {
+        getSha256(zipFile)
+        standardOutput = os
     }
+    return os.toByteArray().toString(Charset.defaultCharset()).trim()
 }
 
 internal fun Project.getZipFile(pluginConfiguration: PluginConfiguration) = getZipFileBuilder(
