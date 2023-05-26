@@ -64,32 +64,13 @@ gradlePlugin {
         create("multiplatformSwiftPackagePlugin") {
             id = "com.dariusz.multiplatform-swiftpackage"
             implementationClass = "com.chromaticnoise.multiplatformswiftpackage.MultiplatformSwiftPackagePlugin"
+            displayName = "Multiplatform Swift Package Plugin"
+            description = "Gradle plugin to generate a Swift.package file and XCFramework to distribute a Kotlin Multiplatform iOS library"
         }
     }
 }
 
 publishing {
-    publications {
-        create<MavenPublication>("multiplatformSwiftPackagePlugin") {
-            pom {
-                groupId = "com.dariusz"
-                artifactId = "multiplatform-swiftpackage"
-                version = VERSION_NAME ?: "0.1"
-
-                name.set("Multiplatform Swift Package")
-                description.set("Gradle plugin to generate a Swift.package file and XCFramework to distribute a Kotlin Multiplatform iOS library")
-                url.set("https://github.com/dariuszszlag/multiplatform-swiftpackage")
-
-                licenses {
-                    license {
-                        name.set("Apache License, Version 2.0")
-                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-            }
-        }
-    }
-
     repositories {
         maven {
             name = "GitHubPackages"
