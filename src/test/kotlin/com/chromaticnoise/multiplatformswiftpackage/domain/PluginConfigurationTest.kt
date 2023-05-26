@@ -1,7 +1,12 @@
 package com.chromaticnoise.multiplatformswiftpackage.domain
 
 import com.chromaticnoise.multiplatformswiftpackage.SwiftPackageExtension
-import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.PluginConfigurationError.*
+import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.PluginConfigurationError.BlankPackageName
+import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.PluginConfigurationError.BlankZipFileName
+import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.PluginConfigurationError.InvalidTargetName
+import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.PluginConfigurationError.MissingAppleTargets
+import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.PluginConfigurationError.MissingSwiftToolsVersion
+import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.PluginConfigurationError.MissingTargetPlatforms
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.TestCase
 import io.kotest.matchers.shouldBe
@@ -20,16 +25,21 @@ class PluginConfigurationTest : BehaviorSpec() {
                 extension.swiftToolsVersion = null
 
                 Then("an error should be returned") {
-                    (PluginConfiguration.of(extension) as Either.Left).value.contains(MissingSwiftToolsVersion)
+                    (PluginConfiguration.of(extension) as Either.Left).value.contains(
+                        MissingSwiftToolsVersion
+                    )
                 }
             }
 
             When("the target platforms produced errors") {
-                val expectedErrors = listOf(InvalidTargetName("invalid name"), InvalidTargetName("whatever"))
+                val expectedErrors =
+                    listOf(InvalidTargetName("invalid name"), InvalidTargetName("whatever"))
                 extension.targetPlatforms = listOf(Either.Left(expectedErrors))
 
                 Then("the errors should be returned") {
-                    (PluginConfiguration.of(extension) as Either.Left).value.containsAll(expectedErrors)
+                    (PluginConfiguration.of(extension) as Either.Left).value.containsAll(
+                        expectedErrors
+                    )
                 }
             }
 
@@ -37,16 +47,27 @@ class PluginConfigurationTest : BehaviorSpec() {
                 extension.targetPlatforms = emptyList()
 
                 Then("an error should be returned") {
-                    (PluginConfiguration.of(extension) as Either.Left).value.contains(MissingTargetPlatforms)
+                    (PluginConfiguration.of(extension) as Either.Left).value.contains(
+                        MissingTargetPlatforms
+                    )
                 }
             }
 
             When("the apple platforms are empty but target platforms are not") {
-                extension.targetPlatforms = listOf(Either.Right(TargetPlatform(PlatformVersion.of("13")!!, listOf(TargetName.IOSarm64))))
+                extension.targetPlatforms = listOf(
+                    Either.Right(
+                        TargetPlatform(
+                            PlatformVersion.of("13")!!,
+                            listOf(TargetName.IOSarm64)
+                        )
+                    )
+                )
                 extension.appleTargets = emptyList()
 
                 Then("an error should be returned") {
-                    (PluginConfiguration.of(extension) as Either.Left).value.contains(MissingAppleTargets)
+                    (PluginConfiguration.of(extension) as Either.Left).value.contains(
+                        MissingAppleTargets
+                    )
                 }
             }
 
@@ -64,13 +85,19 @@ class PluginConfigurationTest : BehaviorSpec() {
                 extension.appleTargets = emptyList()
 
                 Then("an error should be returned") {
-                    (PluginConfiguration.of(extension) as Either.Left).value.contains(BlankPackageName)
+                    (PluginConfiguration.of(extension) as Either.Left).value.contains(
+                        BlankPackageName
+                    )
                 }
             }
 
             When("the package name is null and apple frameworks exist") {
                 val expectedName = "expected name"
-                val framework = AppleFramework(AppleFrameworkOutputFile(mockk()), AppleFrameworkName(expectedName), AppleFrameworkLinkTask(""))
+                val framework = AppleFramework(
+                    AppleFrameworkOutputFile(mockk()),
+                    AppleFrameworkName(expectedName),
+                    AppleFrameworkLinkTask("")
+                )
                 extension.swiftToolsVersion = SwiftToolVersion.of("42")
                 extension.packageName = null
                 extension.appleTargets = listOf(
@@ -78,7 +105,7 @@ class PluginConfigurationTest : BehaviorSpec() {
                 )
 
                 Then("the base name of the first framework should be used") {
-                    PluginConfiguration.of(extension).orNull!!.packageName.value shouldBe expectedName
+                    PluginConfiguration.of(extension).orNull!!.packageName.nameWithSuffix shouldBe expectedName
                 }
             }
 
@@ -95,7 +122,7 @@ class PluginConfigurationTest : BehaviorSpec() {
 
     private lateinit var project: Project
 
-    override suspend fun beforeTest(testCase: TestCase)  {
+    override suspend fun beforeTest(testCase: TestCase) {
         project = mockk(relaxed = true) {
             every { projectDir } returns File("")
         }

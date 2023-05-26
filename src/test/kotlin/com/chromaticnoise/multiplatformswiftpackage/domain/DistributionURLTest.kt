@@ -6,7 +6,7 @@ import io.kotest.matchers.shouldBe
 class DistributionURLTest : StringSpec({
 
     "when appending a path it should be separated by a / from the URL" {
-        val url = DistributionURL("my-url").appendPath("my-path")
+        val url = RemoteDistribution("my-url").appendPath("my-path")
 
         url.value.shouldBe("my-url/my-path")
     }

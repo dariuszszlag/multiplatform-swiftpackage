@@ -11,12 +11,13 @@ internal fun Project.registerCreateZipFileTask() {
 
         dependsOn("createXCFramework")
 
-        val configuration = getConfigurationOrThrow()
-        val outputDirectory = configuration.outputDirectory.value
-        archiveFileName.set(configuration.zipFileName.nameWithExtension)
+        val projectConfiguration = getConfigurationOrThrow()
+        val outputDirectory = projectConfiguration.outputDirectory.value
+        val packageName = projectConfiguration.packageName
+        val xcFrameworkPath = file("$outputDirectory/${packageName.value}.xcframework")
+
+        from(xcFrameworkPath)
         destinationDirectory.set(outputDirectory)
-        from(outputDirectory) {
-            include("**/*.xcframework/")
-        }
+        archiveFileName.set(getZipFile(projectConfiguration).name)
     }
 }

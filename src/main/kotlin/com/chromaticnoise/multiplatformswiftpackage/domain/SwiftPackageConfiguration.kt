@@ -1,11 +1,13 @@
 package com.chromaticnoise.multiplatformswiftpackage.domain
 
 import com.chromaticnoise.multiplatformswiftpackage.MultiplatformSwiftPackagePlugin
+import com.chromaticnoise.multiplatformswiftpackage.domain.MavenDistribution.createMavenDistributionUrl
 import org.gradle.api.Project
 
 internal data class SwiftPackageConfiguration(
     private val project: Project,
     private val packageName: PackageName,
+    private val versionName: VersionName,
     private val toolVersion: SwiftToolVersion,
     private val platforms: String,
     private val distributionMode: DistributionMode,
@@ -14,8 +16,9 @@ internal data class SwiftPackageConfiguration(
 ) {
 
     private val distributionUrl = when (distributionMode) {
-        DistributionMode.Local -> null
-        is DistributionMode.Remote -> distributionMode.url.appendPath(zipFileName.nameWithExtension)
+        is DistributionMode.Local -> null
+        is DistributionMode.Maven -> createMavenDistributionUrl(project, versionName, packageName)
+        is DistributionMode.Remote -> distributionMode.url.appendPath(zipFileName.getName(distributionMode)).value
     }
 
     internal val templateProperties = mapOf(
@@ -23,7 +26,7 @@ internal data class SwiftPackageConfiguration(
         "name" to packageName.value,
         "platforms" to platforms,
         "isLocal" to (distributionMode == DistributionMode.Local),
-        "url" to distributionUrl?.value,
+        "url" to distributionUrl,
         "checksum" to zipChecksum.trim()
     )
 

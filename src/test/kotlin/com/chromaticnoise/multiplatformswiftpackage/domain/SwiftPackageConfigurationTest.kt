@@ -36,7 +36,7 @@ class SwiftPackageConfigurationTest : StringSpec() {
 
         "is-local property should be false if distribution mode is remote" {
             configuration()
-                .copy(distributionMode = DistributionMode.Remote(DistributionURL("")))
+                .copy(distributionMode = DistributionMode.Remote(RemoteDistribution("")))
                 .templateProperties["isLocal"].shouldBe(false)
         }
 
@@ -48,14 +48,14 @@ class SwiftPackageConfigurationTest : StringSpec() {
 
         "url property should match the value of the remote distribution url" {
             (configuration()
-                .copy(distributionMode = DistributionMode.Remote(DistributionURL("my url")))
+                .copy(distributionMode = DistributionMode.Remote(RemoteDistribution("my url")))
                 .templateProperties["url"] as String).shouldStartWith("my url")
         }
 
         "url property should end with the zip file name and the .zip file extension" {
             (configuration()
                 .copy(
-                    distributionMode = DistributionMode.Remote(DistributionURL("url")),
+                    distributionMode = DistributionMode.Remote(RemoteDistribution("url")),
                     zipFileName = ZipFileName.of("zip file name").orNull!!
                 )
                 .templateProperties["url"] as String).shouldEndWith("zip file name.zip")
