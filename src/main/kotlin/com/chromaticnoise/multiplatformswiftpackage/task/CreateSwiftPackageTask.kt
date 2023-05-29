@@ -2,6 +2,7 @@ package com.chromaticnoise.multiplatformswiftpackage.task
 
 import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration
 import com.chromaticnoise.multiplatformswiftpackage.domain.SwiftPackageConfiguration
+import com.chromaticnoise.multiplatformswiftpackage.domain.ZipFileTaskHelper.zipFileChecksum
 import com.chromaticnoise.multiplatformswiftpackage.domain.getConfigurationOrThrow
 import com.chromaticnoise.multiplatformswiftpackage.domain.konanTarget
 import com.chromaticnoise.multiplatformswiftpackage.domain.swiftPackagePlatformName
