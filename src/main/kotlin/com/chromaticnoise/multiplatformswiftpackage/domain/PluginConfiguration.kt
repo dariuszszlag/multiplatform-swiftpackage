@@ -5,6 +5,7 @@ import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.P
 import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.PluginConfigurationError.MissingAppleTargets
 import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.PluginConfigurationError.MissingSwiftToolsVersion
 import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.PluginConfigurationError.MissingTargetPlatforms
+import com.chromaticnoise.multiplatformswiftpackage.domain.ProjectProcessHelper.findRepoRoot
 import org.gradle.api.Project
 
 internal class PluginConfiguration private constructor(
@@ -56,7 +57,7 @@ internal class PluginConfiguration private constructor(
                         extension.buildConfiguration,
                         packageName.orNull!!,
                         versionName?.orNull ?: getDestinationProjectVersion(extension.project),
-                        extension.outputDirectory,
+                        extension.outputDirectory ?: extension.getRootOfTheProject(),
                         extension.swiftToolsVersion!!,
                         extension.distributionMode,
                         targetPlatforms,
@@ -84,6 +85,11 @@ internal class PluginConfiguration private constructor(
 
         private fun getDestinationProjectVersion(project: Project) =
             VersionName.of(project.version.toString()).orNull!!
+
+        private fun SwiftPackageExtension.getRootOfTheProject(): OutputDirectory {
+            val projectOutputDirectory = if (outputDirectory == null && distributionMode != DistributionMode.Local) project.file(project.findRepoRoot()) else outputDirectory!!.value
+            return OutputDirectory(projectOutputDirectory)
+        }
     }
 
     internal sealed class PluginConfigurationError {

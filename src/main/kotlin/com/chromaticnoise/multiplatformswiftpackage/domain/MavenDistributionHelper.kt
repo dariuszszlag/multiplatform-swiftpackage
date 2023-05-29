@@ -5,7 +5,7 @@ import org.gradle.api.artifacts.repositories.MavenArtifactRepository
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.kotlin.dsl.getByType
 
-internal object MavenDistribution {
+internal object MavenDistributionHelper {
 
     private val String.slashTerminatedValue: String
         get() = takeIf { it.endsWith("/") } ?: "$this/"

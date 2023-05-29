@@ -1,7 +1,7 @@
 package com.chromaticnoise.multiplatformswiftpackage.domain
 
 import com.chromaticnoise.multiplatformswiftpackage.MultiplatformSwiftPackagePlugin
-import com.chromaticnoise.multiplatformswiftpackage.domain.MavenDistribution.createMavenDistributionUrl
+import com.chromaticnoise.multiplatformswiftpackage.domain.MavenDistributionHelper.createMavenDistributionUrl
 import org.gradle.api.Project
 
 internal data class SwiftPackageConfiguration(

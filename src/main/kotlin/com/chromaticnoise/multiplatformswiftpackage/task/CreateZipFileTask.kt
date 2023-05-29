@@ -1,5 +1,6 @@
 package com.chromaticnoise.multiplatformswiftpackage.task
 
+import com.chromaticnoise.multiplatformswiftpackage.domain.ZipFileTaskHelper.getZipFile
 import com.chromaticnoise.multiplatformswiftpackage.domain.getConfigurationOrThrow
 import org.gradle.api.Project
 import org.gradle.api.tasks.bundling.Zip
