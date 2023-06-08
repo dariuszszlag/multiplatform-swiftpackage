@@ -40,16 +40,21 @@ private fun List<PluginConfigurationError>.toErrorMessage() = joinToString("\n\n
         """.trimIndent()
 
         PluginConfigurationError.BlankPackageName -> """
-        * Package name must not be blank
+        * Package name must not be blank.
           Either declare the base name of your frameworks or use a non-empty package name.
         """.trimIndent()
 
         PluginConfigurationError.BlankZipFileName -> """
-        * ZIP file name must not be blank
+        * ZIP file name must not be blank.
         """.trimIndent()
 
         PluginConfigurationError.BlankVersionName -> """
-        * Version name must not be blank
+        * Version name must not be blank.
+        """.trimIndent()
+
+        PluginConfigurationError.BlankOutputDirectory -> """
+        * There is no git repository in root directory.
+          In this case declare Output Directory manually.
         """.trimIndent()
     }
 }

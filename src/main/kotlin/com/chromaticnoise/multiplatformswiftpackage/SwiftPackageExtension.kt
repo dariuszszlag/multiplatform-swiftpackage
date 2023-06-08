@@ -23,7 +23,7 @@ open class SwiftPackageExtension(internal val project: Project) {
 
     internal var buildConfiguration: BuildConfiguration = BuildConfiguration.Release
     internal var packageName: Either<PluginConfigurationError, PackageName>? = null
-    internal var outputDirectory: OutputDirectory? = null
+    internal var outputDirectory: Either<PluginConfigurationError, OutputDirectory>? = null
     internal var swiftToolsVersion: SwiftToolVersion? = null
     internal var distributionMode: DistributionMode = DistributionMode.Local
     internal var targetPlatforms: Collection<Either<List<PluginConfigurationError>, TargetPlatform>> =
@@ -49,7 +49,7 @@ open class SwiftPackageExtension(internal val project: Project) {
      * @param directory where the files will be created.
      */
     fun outputDirectory(directory: File) {
-        outputDirectory = OutputDirectory(directory)
+        outputDirectory = OutputDirectory.of(project, directory)
     }
 
     /**
