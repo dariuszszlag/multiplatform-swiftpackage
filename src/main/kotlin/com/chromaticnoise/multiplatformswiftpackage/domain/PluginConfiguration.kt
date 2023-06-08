@@ -48,6 +48,8 @@ internal class PluginConfiguration private constructor(
 
                 versionName?.leftValueOrNull?.let { error -> add(error) }
 
+                extension.outputDirectory?.leftValueOrNull?.let { error -> add(error) }
+
             }
 
             return if (errors.isEmpty()) {
