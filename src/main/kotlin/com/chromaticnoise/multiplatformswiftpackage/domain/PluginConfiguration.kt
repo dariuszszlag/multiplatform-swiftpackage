@@ -5,8 +5,6 @@ import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.P
 import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.PluginConfigurationError.MissingAppleTargets
 import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.PluginConfigurationError.MissingSwiftToolsVersion
 import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.PluginConfigurationError.MissingTargetPlatforms
-import com.chromaticnoise.multiplatformswiftpackage.domain.ProjectProcessHelper.findRepoRoot
-import com.chromaticnoise.multiplatformswiftpackage.domain.ProjectProcessHelper.isRootDirectoryGitRepository
 import org.gradle.api.Project
 
 internal class PluginConfiguration private constructor(
@@ -50,6 +48,8 @@ internal class PluginConfiguration private constructor(
 
                 versionName?.leftValueOrNull?.let { error -> add(error) }
 
+                extension.outputDirectory?.leftValueOrNull?.let { error -> add(error) }
+
             }
 
             return if (errors.isEmpty()) {
@@ -58,7 +58,7 @@ internal class PluginConfiguration private constructor(
                         extension.buildConfiguration,
                         packageName.orNull!!,
                         versionName?.orNull ?: getDestinationProjectVersion(extension.project),
-                        extension.outputDirectory ?: extension.getRootOfTheProject(),
+                        extension.outputDirectory?.orNull!!,
                         extension.swiftToolsVersion!!,
                         extension.distributionMode,
                         targetPlatforms,
@@ -84,13 +84,7 @@ internal class PluginConfiguration private constructor(
         private fun defaultZipFileName(packageName: PackageName, versionName: VersionName) =
             ZipFileName.of("${packageName.nameWithSuffix}-${versionName.value}").orNull!!
 
-        private fun getDestinationProjectVersion(project: Project) =
-            VersionName.of(project.version.toString()).orNull!!
-
-        private fun SwiftPackageExtension.getRootOfTheProject(): OutputDirectory {
-            val projectOutputDirectory = if (project.isRootDirectoryGitRepository()) project.file(project.findRepoRoot()) else outputDirectory!!.value
-            return OutputDirectory(projectOutputDirectory)
-        }
+        private fun getDestinationProjectVersion(project: Project) = VersionName.of(project.version.toString()).orNull!!
     }
 
     internal sealed class PluginConfigurationError {
@@ -101,5 +95,6 @@ internal class PluginConfiguration private constructor(
         object BlankPackageName : PluginConfigurationError()
         object BlankVersionName : PluginConfigurationError()
         object BlankZipFileName : PluginConfigurationError()
+        object BlankOutputDirectory : PluginConfigurationError()
     }
 }
