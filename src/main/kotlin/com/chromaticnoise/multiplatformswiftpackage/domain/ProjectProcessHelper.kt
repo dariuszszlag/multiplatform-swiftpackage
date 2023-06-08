@@ -5,6 +5,11 @@ import org.gradle.api.Project
 
 internal object ProjectProcessHelper {
 
+    internal fun Project.isRootDirectoryGitRepository(): Boolean {
+        val results = procRunWarnLog("git", "rev-parse", "--is-inside-work-tree")
+        return results.isNotEmpty() && results.first() == "true"
+    }
+
     internal fun Project.findRepoRoot(): String {
         val results = procRunWarnLog("git", "rev-parse", "--show-toplevel")
         return if (results.isEmpty()) {
@@ -27,7 +32,7 @@ internal object ProjectProcessHelper {
         return output
     }
 
-    private fun procRun(vararg params: String, processLines: (String, Int) -> Unit): Unit {
+    private fun procRun(vararg params: String, processLines: (String, Int) -> Unit) {
         val process = ProcessBuilder(*params)
             .redirectErrorStream(true)
             .start()

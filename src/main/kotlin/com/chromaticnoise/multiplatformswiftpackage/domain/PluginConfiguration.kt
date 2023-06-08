@@ -6,6 +6,7 @@ import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.P
 import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.PluginConfigurationError.MissingSwiftToolsVersion
 import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.PluginConfigurationError.MissingTargetPlatforms
 import com.chromaticnoise.multiplatformswiftpackage.domain.ProjectProcessHelper.findRepoRoot
+import com.chromaticnoise.multiplatformswiftpackage.domain.ProjectProcessHelper.isRootDirectoryGitRepository
 import org.gradle.api.Project
 
 internal class PluginConfiguration private constructor(
@@ -87,7 +88,7 @@ internal class PluginConfiguration private constructor(
             VersionName.of(project.version.toString()).orNull!!
 
         private fun SwiftPackageExtension.getRootOfTheProject(): OutputDirectory {
-            val projectOutputDirectory = if (outputDirectory == null && distributionMode != DistributionMode.Local) project.file(project.findRepoRoot()) else outputDirectory!!.value
+            val projectOutputDirectory = if (project.isRootDirectoryGitRepository()) project.file(project.findRepoRoot()) else outputDirectory!!.value
             return OutputDirectory(projectOutputDirectory)
         }
     }
